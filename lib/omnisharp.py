@@ -38,7 +38,7 @@ class WorkerThread(threading.Thread):
 
     def run(self):
         try:
-            print('======== request ======== \n Url: %s \n Data: %s' % (self.url, self.data))
+            # print('======== request ======== \n Url: %s \n Data: %s' % (self.url, self.data))
 
             response = pool.urlopen('POST', self.url, body=self.data, timeout=self.timeout).data
             
@@ -129,18 +129,20 @@ def create_omnisharp_server_subprocess(view):
                 omni_exe_path, 
                 '-s', quote_path(solution_path),
                 '-p', str(omni_port),
-                '-config', quote_path(config_file),
+                '--configure', quote_path(config_file),
                 '--hostPID', str(os.getpid())
             ]
 
             cmd = ' '.join(args)
             print(cmd)
-            
-            view.window().run_command("exec",{"cmd":cmd,"shell":"true","quiet":"true"})
+            path = ''
+            if sublime.platform() == "osx":
+                path = '/bin:/usr/bin:/usr/local/bin:/opt/local/bin'
+            view.window().run_command("exec",{"cmd":cmd,"shell":"true","quiet":"true",'path':path})
             view.window().run_command("hide_panel", {"panel": "output.exec"})
 
             set_omnisharp_status("Loading Project")
-            sublime.set_timeout(lambda:check_solution_ready_status(view), 5000)
+            # sublime.set_timeout(lambda:check_solution_ready_status(view), 5000)
 
         except Exception as e:
             print('RAISE_OMNI_SHARP_LAUNCHER_EXCEPTION:%s' % repr(e))
@@ -163,7 +165,7 @@ def find_omni_exe_paths():
     print(plugin_dir_path)
 
     omni_exe_candidate_rel_paths = [
-        'omnisharp-roslyn/artifacts/build/omnisharp/' + script_name,
+        'omnisharp-roslyn/scripts/' + script_name[0].upper() + script_name[1:],
         'PrebuiltOmniSharpServer/' + script_name,
     ]
 
@@ -172,9 +174,7 @@ def find_omni_exe_paths():
         for rel_path in omni_exe_candidate_rel_paths
     ]
 
-    return [omni_exe_path 
-        for omni_exe_path in omni_exe_candidate_abs_paths
-        if os.access(omni_exe_path, os.R_OK)]
+    return ['/Users/fishg/data/opensource/omnisharp-roslyn/scripts/Omnisharp']
 
 def set_omnisharp_status(statusmsg):
     sublime.active_window().active_view().set_status("OmniSharp", "OmniSharp : " + statusmsg)

@@ -70,9 +70,9 @@ class OmniSharpSyntaxEventListener(sublime_plugin.EventListener):
                 if region_that_would_be_looked_up.begin() != reg.begin() or region_that_would_be_looked_up.end() != reg.end():
                     reg = sublime.Region(point, point+1)
                 # self.underlines.append(reg)
-                if i["LogLevel"] == "Warning" :
+                if i['LogLevel'] == 'Warning' or i['LogLevel'] == 'Hidden':
                     self.warninglines.append(reg)
-                if i["LogLevel"] == "Error" :
+                if i['LogLevel'] == 'Error' :
                     self.errlines.append(reg)
                 key = "%s,%s" % (reg.a, reg.b)
                 oops_map[key] = i["Text"].strip()
@@ -86,11 +86,11 @@ class OmniSharpSyntaxEventListener(sublime_plugin.EventListener):
                 self.view.add_regions("oops", self.errlines, "sublimelinter.mark.error", "circle",  sublime.DRAW_NO_FILL|sublime.DRAW_NO_OUTLINE|sublime.DRAW_SOLID_UNDERLINE )
                 if showErrorPanel:
                     self.view.window().run_command("show_panel", {"panel": "output.variable_get"})
-            if len(self.warninglines) > 0:
+            if not haveError and len(self.warninglines) > 0:
                 # print('underlines')
                 self.view.settings().set("oops", oops_map)
                 self.view.add_regions("oops", self.warninglines, "sublimelinter.mark.warning", "dot", sublime.DRAW_NO_FILL + sublime.DRAW_NO_OUTLINE + sublime.DRAW_SQUIGGLY_UNDERLINE )
-                if (not haveError or not showErrorPanel) and showWarningPanel:
+                if showWarningPanel:
                     self.view.window().run_command("show_panel", {"panel": "output.variable_get"})
 
         self.data = None
