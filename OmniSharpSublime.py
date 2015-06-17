@@ -31,5 +31,6 @@ def plugin_unloaded():
         if os.name != 'posix':
             # kill the exe before the update complains about exe in use
             # os.system('taskkill /f /im omnisharp-roslyn/OmniSharp.exe')
+            pass
 
     print('omnisharp plugin_unloaded')

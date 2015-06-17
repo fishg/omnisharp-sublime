@@ -129,9 +129,11 @@ def create_omnisharp_server_subprocess(view):
                 omni_exe_path, 
                 '-s', quote_path(solution_path),
                 '-p', str(omni_port),
-                '--configure', quote_path(config_file),
                 '--hostPID', str(os.getpid())
             ]
+            if config_file:
+                args.append('--configure')
+                args.append(quote_path(config_file))
 
             cmd = ' '.join(args)
             print(cmd)
