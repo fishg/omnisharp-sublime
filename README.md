@@ -32,11 +32,18 @@
  22. Reload Solution
 
 #Requirements
- * Mono Development Kit(for [OmniSharpServer](https://github.com/nosami/OmniSharpServer))
+ * [Mono Development Kit](http://www.mono-project.com/download/) (for [omnisharp-roslyn](https://github.com/OmniSharp/omnisharp-roslyn))
 
 #Installation
 
  * Using [Package Control](https://packagecontrol.io), install the package called `OmniSharp`
+ * `brew install dnvm`
+ * `source dnvm.sh`
+ * `dnvm upgrade`
+ * `cd ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/OmniSharp`
+ * `git submodule update --init --recursive`
+ * `cd omnisharp-roslyn`
+ * `dnu restore`
 
 # Building From Source
 1. Move to ST3 plugin directory in console.
@@ -51,7 +58,6 @@
 
         cd OmniSharp
         git submodule update --init --recursive
-        ./build.sh
 
 # Project Setting
 The server will automatically find the the solution file from the folder you have opened in Sublime.  If you have multiple solutions you have to specify the solution file you wish to use in a `sublime-project`. 
@@ -106,35 +112,6 @@ Once the `YOURPROJECT.sublime-project` is set up and saved, follow the below:
 #OmniSharpServer Settings
 The Sublime plugin communicates to OmniSharp Server which has various available settings stored in a `config.json` file. By default the location of this file is in a folder under the Sublime OmniSharp packages folder called `PrebuiltOmniSharpServer` and there is also a user specific plugin setting that specifies the location of this `config.json` file.  To prevent your settings being overridden on new releases of the Sublime package, we recommend you store your `config.json` file somewhere other than the default location.  Once you have taken a copy of `config.json` and put it somewhere safe you will need to update the Sublime plugin's user setting called `"omnisharp_server_config_location"`. 
 
- 
-#Format Document Settings
-
-When you press `Ctrl + K + D` to format the document you may see `CR` markers.  
-
-![CR Markers](http://i.imgur.com/SBgyjtk.png)
-
-This is to do with the settings for `OmniSharpServer`.  
-
-1. Click Preferences - Browse Packages
-2. Go to `OmniSharp/PrebuiltOmniSharpServer/` sub directory 
-3. Open config.json and modify the `eolMarker` setting to `\n` like below
-
-**OR**
-
-Open your safely tucked away config.json file and modify the `eolMarker` setting to `\n` like below
-
-```json
-  "TextEditorOptions": {
-    "tabsToSpaces": true,
-    "tabSize": 4,
-    "indentSize": 4,
-    "continuationIndent": 4,
-    "labelIndent": 0,
-    "eolMarker": "\n",
-    "indentBlankLines": false,
-    "wrapLineLength": 80
-  },
-```
 
 #Unit Tests
 
