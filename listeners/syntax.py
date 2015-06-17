@@ -61,7 +61,7 @@ class OmniSharpSyntaxEventListener(sublime_plugin.EventListener):
         oops_map = {}
 
         if "QuickFixes" in self.data and self.data["QuickFixes"] != None and len(self.data["QuickFixes"]) > 0:
-            self.data["QuickFixes"].sort(key = lambda a:(a['Line'],a['Column']))
+            self.data["QuickFixes"].sort(key = lambda a:(a['LogLevel'],a['Line'],a['Column']))
             self.outputpanel.write_line("File: "+self.data["QuickFixes"][0]["FileName"]+"\n")
             for i in self.data["QuickFixes"]:
                 point = self.view.text_point(i["Line"]-1, i["Column"]-1)
