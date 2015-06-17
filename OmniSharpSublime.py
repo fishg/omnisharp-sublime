@@ -14,12 +14,12 @@ def plugin_loaded():
     settings = sublime.load_settings('OmniSharpSublime.sublime-settings')
     configpath = settings.get("omnisharp_server_config_location")
     if not configpath:
-        settings.set("omnisharp_server_config_location", sublime.packages_path() + os.path.sep + "OmniSharp" + os.path.sep + "PrebuiltOmniSharpServer" + os.path.sep + "config.json")
+        settings.set("omnisharp_server_config_location", "")
         sublime.save_settings('OmniSharpSublime.sublime-settings')
 
     if os.name == 'posix':
         # give the launch script executable permissions
-        script_path = os.path.dirname(__file__) + '/PrebuiltOmniSharpServer/omnisharp'
+        script_path = os.path.dirname(__file__) + '/omnisharp-roslyn/scripts/Omnisharp'
         st = os.stat(script_path)
         os.chmod(script_path, st.st_mode | 0o111)
 
@@ -30,6 +30,6 @@ def plugin_unloaded():
         print('About to upgrade OmniSharp')
         if os.name != 'posix':
             # kill the exe before the update complains about exe in use
-            os.system('taskkill /f /im PrebuiltOmniSharpServer/OmniSharp.exe')
+            # os.system('taskkill /f /im omnisharp-roslyn/OmniSharp.exe')
 
     print('omnisharp plugin_unloaded')

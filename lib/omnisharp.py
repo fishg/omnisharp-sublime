@@ -174,7 +174,9 @@ def find_omni_exe_paths():
         for rel_path in omni_exe_candidate_rel_paths
     ]
 
-    return ['/Users/fishg/data/opensource/omnisharp-roslyn/scripts/Omnisharp']
+    return [omni_exe_path 
+        for omni_exe_path in omni_exe_candidate_abs_paths
+        if os.access(omni_exe_path, os.R_OK)]
 
 def set_omnisharp_status(statusmsg):
     sublime.active_window().active_view().set_status("OmniSharp", "OmniSharp : " + statusmsg)
