@@ -26,6 +26,7 @@ server_ports = {
 pool = PoolManager(headers={'Content-Type': 'application/json; charset=UTF-8'})
 
 readycount = 0
+check_alive_status_interval = 10000
 
 class WorkerThread(threading.Thread):
     def __init__(self, url, data, callback, timeout):
@@ -144,7 +145,7 @@ def create_omnisharp_server_subprocess(view):
             view.window().run_command("hide_panel", {"panel": "output.exec"})
 
             set_omnisharp_status("Loading Project")
-            # sublime.set_timeout(lambda:check_solution_ready_status(view), 5000)
+            sublime.set_timeout(lambda:check_solution_ready_status(view), check_alive_status_interval + 5000)
 
         except Exception as e:
             print('RAISE_OMNI_SHARP_LAUNCHER_EXCEPTION:%s' % repr(e))
@@ -191,14 +192,14 @@ def ready_status_handler(data):
     if data == False:
         readycount += 1
         if readycount < 5:
-            sublime.set_timeout(lambda:check_solution_ready_status(sublime.active_window().active_view()), 5000)
+            sublime.set_timeout(lambda:check_solution_ready_status(sublime.active_window().active_view()), check_alive_status_interval)
         else:
             set_omnisharp_status("Error Loading Project")
             readycount = 0
     elif data == True:
         readycount = 0
         set_omnisharp_status("Project Loaded")
-        sublime.set_timeout(lambda:check_server_alive_status(sublime.active_window().active_view()), 5000)
+        sublime.set_timeout(lambda:check_server_alive_status(sublime.active_window().active_view()), check_alive_status_interval)
 
 def check_server_alive_status(view):
     get_response(view, "/checkalivestatus", alive_status_handler)    
