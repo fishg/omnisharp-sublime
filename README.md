@@ -32,11 +32,12 @@
  22. Reload Solution
 
 #Requirements
- * [Mono Development Kit](http://www.mono-project.com/download/) (for [omnisharp-roslyn](https://github.com/OmniSharp/omnisharp-roslyn))
+ * [Mono Development Kit 4.x](http://www.mono-project.com/download/) (for [omnisharp-roslyn](https://github.com/OmniSharp/omnisharp-roslyn))
 
 #Installation
 
  * Using [Package Control](https://packagecontrol.io), install the package called `OmniSharp`
+ * `brew tap aspnet/dnx`
  * `brew install dnvm`
  * `source dnvm.sh`
  * `dnvm upgrade`
