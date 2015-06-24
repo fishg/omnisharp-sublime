@@ -37,7 +37,7 @@ class OmniSharpCodeActions(sublime_plugin.TextCommand):
                 params['selectionEndLine'] = self.selectionEndLine
 
             omnisharp.get_response(
-                self.view, '/getcodeactions', self._handle_codeactions, params)
+                self.view, '/v2/getcodeactions', self._handle_codeactions, params)
         else:
             self._show_code_actions_view(edit)
 
@@ -55,7 +55,7 @@ class OmniSharpCodeActions(sublime_plugin.TextCommand):
         if "CodeActions" in self.data and self.data["CodeActions"] != None:
             for i in self.data["CodeActions"]:
                 print(i)
-                self.quickitems.append(i.strip())
+                self.quickitems.append(i['Identifier'].strip())
         if len(self.quickitems) > 0:
             self.view.window().show_quick_panel(self.quickitems, self.on_done)
         else:
@@ -85,7 +85,8 @@ class OmniSharpCodeActions(sublime_plugin.TextCommand):
         params['selectionStartLine'] = self.selectionStartLine
         params['selectionEndColumn'] = self.selectionEndColumn
         params['selectionEndLine'] = self.selectionEndLine
-        omnisharp.get_response(self.view, '/runcodeaction', self._handle_runcodeaction, params)
+        params['Identifier'] = self.quickitems[index]
+        omnisharp.get_response(self.view, '/v2/runcodeaction', self._handle_runcodeaction, params)
         self.data = None
         self.selectionEndLine = 0
         self.selectionEndColumn = 0
@@ -98,7 +99,7 @@ class OmniSharpCodeActions(sublime_plugin.TextCommand):
         if data is None:
             return
         
-        self.view.run_command("omni_sharp_run_code_action",{"args":{'text':data['Text']}})
+        self.view.run_command("omni_sharp_run_code_action",{"args":{'text':data['Changes'][0]['Buffer']}})
 
 class OmniSharpRunCodeAction(sublime_plugin.TextCommand):
   def run(self, edit, args):
